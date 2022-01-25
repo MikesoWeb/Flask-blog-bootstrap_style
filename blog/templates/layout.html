@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+
+    {% block head %}
+      <meta charset="UTF-8">
+        <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='icon/favicon.ico') }}">
+
+        {% block styles %}
+            {{ bootstrap.load_css() }}
+            <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+        {% endblock styles %}
+
+
+      {% block title %}
+
+        <title>{{ title if title else 'Flask-blog' }}</title>
+
+      {% endblock title %}
+{% endblock head %}
+</head>
+
+<body>
+<div class="wrapper">
+
+{% block menu %}
+
+    {% include 'menu.html' %}
+
+{% endblock menu %}
+
+
+    <div class="content">
+
+<main role="main" class="#">
+            <div class="row">
+            <div class="col-md-12">
+                {% block flash %}
+                    {% with messages = get_flashed_messages(with_categories=True) %}
+
+                    {% if messages %}
+                    {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+
+                    {% endwith %}
+                {% endblock flash %}
+
+                {% block content %}
+                {% endblock content %}
+        </div>
+        </div>
+
+        </main>
+
+    </div>
+
+<!--MAIN_PAGE-->
+    {% block main_page %}
+
+    {% endblock main_page %}
+
+
+<!--FOOTER-->
+    {% block footer %}
+
+        <footer class="footer">Все права защищены!<br>
+            &#169; Терехов Михаил 2021
+
+        </footer>
+
+    {% endblock footer %}
+</div>
+
+<!--SCRIPT-->
+    {% block scripts %}
+        {{ bootstrap.load_js() }}
+    {% endblock scripts %}
+</body>
+</html>
