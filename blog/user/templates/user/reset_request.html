@@ -1,35 +1,16 @@
 {% extends 'layout.html' %}
+{% from 'bootstrap5/form.html' import render_form %}
+{% block main_page %}
 
-{% block content %}
+<div class="row h-100">
+    <div class="col-4 m-auto align-self-center">
+                    <h3 class="text-primary">Сброс пароля</h3>
 
-<div class="login_form reset_pass">
-    <form action="" method="POST">
-
-        {{ form_reset.hidden_tag() }}
-            <legend class="border-bottom mb-4">Сбросить пароль</legend>
-
-            <div class="form-group">
-                {% if form_reset.email.errors %}
-                {{ form_reset.email(class='form-post-title is-invalid') }}
-                <div class="invalid-feedback">
-                    {% for errors in form_reset.email.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-                {% else %}
-                    {{ form_reset.email(class='form-post-title', placeholder='Емайл') }}
-                {% endif %}
-            </div>
+            {{ render_form(form, horizontal_columns=('lg', 2, 100), button_style='btn btn-outline-primary',
+            button_size='md') }}
 
 
-
-        <div class="form-group">
-            {{ form_reset.submit(class='btn_log_in', style="width: auto; padding-right: 10px;") }}
         </div>
+    </div>
 
-    </form>
-</div>
-
-
-
-{% endblock content %}
+{% endblock  %}

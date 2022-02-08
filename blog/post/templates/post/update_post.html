@@ -1,35 +1,13 @@
 {% extends 'layout.html' %}
+{% from 'bootstrap5/form.html' import render_form %}
 
-{% block content %}
-<div class="login_form">
-    <form action="" class="form_sign_in" enctype="multipart/form-data" method="POST">
+{% block main_page %}
 
-
-        {{ form_post_update.hidden_tag() }}
-
-        <legend class="legend">{{ legend }}</legend>
-
-
-        <div class="invalid-feedback">
-            {% for errors in form_post_update.title.errors %}
-            <span>{{ error }}</span>
-            {% endfor %}
+<div class="row h-100">
+        <div class="col-6 m-auto align-self-center">
+            <h2 class="text-primary">Новый пост</h2>
+                {{ render_form(form, button_size='lg', ) }}
         </div>
+    </div>
 
-
-
-
-        {{ form_post_update.title(class='form-post-title', placeholder='Обновить заголовок') }}
-
-        {{ form_post_update.content(class='form-post-textarea', placeholder='Обновить текст статьи') }}
-
-        Рубрика {{ form_post_update.category(style='wight:500px; color: blue; font-size: 18px;')}}
-
-        {{ form_post_update.picture }}
-
-
-        {{ form_post_update.submit(class='btn_new_post') }}
-
-    </form>
-</div>
-{% endblock content %}
+{% endblock main_page %}

@@ -50,7 +50,7 @@ def new_post():
                          filename=f'profile_pics/' + 'users/' + current_user.username + '/post_images/'
                                   + current_user.image_file)
     return render_template('post/create_post.html', title='Новая статья',
-                           form_new_post=form, legend='Новая статья', image_file=image_file)
+                           form=form, legend='Новая статья', image_file=image_file)
 
 
 # http://wtforms.simplecodes.com/docs/0.6.1/fields.html#custom-fields
@@ -142,7 +142,7 @@ def update_post(slug):
                          filename=f'profile_pics/users/{current_user.username}/post_images/{post.image_post}')
 
     return render_template('post/update_post.html', title='Обновление ' + post.title,
-                           form_post_update=form, legend='Обновить статью', image_file=image_file, post=post)
+                           form=form, legend='Обновить статью', image_file=image_file, post=post)
 
 
 @posts.route('/post/comment/<int:comment_id>/update/', methods=['GET', 'POST'])

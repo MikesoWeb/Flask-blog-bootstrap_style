@@ -3,39 +3,45 @@
 <head>
 
     {% block head %}
-      <meta charset="UTF-8">
-        <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='icon/favicon.ico') }}">
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='icon/favicon.ico') }}">
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">-->
 
-        {% block styles %}
-            {{ bootstrap.load_css() }}
-            <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
-        {% endblock styles %}
+    {% block styles %}
+    {{ bootstrap.load_css() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rubik+Beastly&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Marck+Script&family=Rubik+Beastly&display=swap');
+
+    </style>
+
+    {% endblock styles %}
 
 
-      {% block title %}
+    {% block title %}
 
-        <title>{{ title if title else 'Flask-blog' }}</title>
+    <title>{{ title if title else 'Flask-blog' }}</title>
 
-      {% endblock title %}
-{% endblock head %}
+    {% endblock title %}
+    {% endblock head %}
 </head>
 
 <body>
-<div class="wrapper">
-
-{% block menu %}
-
-    {% include 'menu.html' %}
-
-{% endblock menu %}
 
 
-    <div class="content">
+    {% block menu %}
 
-<main role="main" class="#">
+        {% include 'menu.html' %}
+
+    {% endblock menu %}
+
+    <div class="wrapper">
+
+        <main role="main" class="#">
             <div class="row">
-            <div class="col-md-12">
-                {% block flash %}
+                <div class="col-md-12">
+                    {% block flash %}
                     {% with messages = get_flashed_messages(with_categories=True) %}
 
                     {% if messages %}
@@ -47,37 +53,38 @@
                     {% endif %}
 
                     {% endwith %}
-                {% endblock flash %}
+                    {% endblock flash %}
 
-                {% block content %}
-                {% endblock content %}
-        </div>
-        </div>
+                    {% block content %}
+                    {% endblock content %}
+                </div>
+            </div>
 
         </main>
 
     </div>
 
-<!--MAIN_PAGE-->
+    <!--MAIN_PAGE-->
     {% block main_page %}
+    <div class="content">
 
+        </div>
     {% endblock main_page %}
 
 
-<!--FOOTER-->
+    <!--FOOTER-->
     {% block footer %}
 
-        <footer class="footer">Все права защищены!<br>
-            &#169; Терехов Михаил 2021
+    <footer class="footer">Все права защищены!<br>
+        &#169; Терехов Михаил 2021
 
-        </footer>
+    </footer>
 
     {% endblock footer %}
-</div>
 
 <!--SCRIPT-->
-    {% block scripts %}
-        {{ bootstrap.load_js() }}
-    {% endblock scripts %}
+{% block scripts %}
+{{ bootstrap.load_js() }}
+{% endblock scripts %}
 </body>
 </html>

@@ -55,7 +55,7 @@ def send_reset_email(user):
                   recipients=[user.email])
     msg.body = f"""
     Чтобы сбросить ваш пароль, перейдите по этой ссылке:
-    {url_for('user.reset_token', token=token, _external=True)}
+    {url_for('users.reset_token', token=token, _external=True)}
 
     Если вы не делали данный запрос, просто проигнорируйте это письмо!
     Никаких изменений произведено не будет!

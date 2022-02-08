@@ -1,49 +1,52 @@
-<header class="header">
 
-    <div class="logo">
-        <img src="{{ url_for('static', filename='img/logo.jpg') }}" alt="logo">
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Flask Blog</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{{ url_for('main.home') }}">Главная</a>
+                    </li>
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.blog') }}">Блог</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('users.account') }}">Аккаунт</a>
+                    </li>
+                    {% if current_user.is_admin %}
 
-    </div>
-<ul class="main_menu">
-{% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('admin.admin_panel') }}">Админка</a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('users.logout') }}">Выход</a>
+                    </li>
+
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('users.register') }}">Регистрация</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('users.login') }}">Логин</a>
+                    </li>
+
+                    {% endif %}
 
 
-        <li><a href="{{ url_for('main.home') }}">Главная</a></li>
-        <li><a href="{{ url_for('main.blog') }}">Блог</a></li>
-        <li><a href="{{ url_for('users.account') }}">Аккаунт</a></li>
-        {% if current_user.is_admin %}
-          <li><a href="{{ url_for('admin.admin_panel') }}">Админка</a></li>
-        {% else %}
-        {% endif %}
-
-        <li><a href="{{ url_for('users.logout') }}">Выход</a></li>
-
-     <div class="online_status">
-
-        <div class="online_user"></div>
-        <div class="current_user">
-            <small>{{ current_user.username }}</small>
-        </div>
-     </div>
-
-        {% else %}
-
-        <li><a href="{{ url_for('main.home') }}">Главная</a></li>
-        <li><a href="{{ url_for('users.register') }}">Регистрация</a></li>
-        <li><a href="{{ url_for('users.login') }}">Логин</a></li>
-
-        {% endif %}
-
-    </ul>
-<div class="form_search">
-    <form action="{{ url_for('posts.search')}}" method="GET" class="form_search_blog">
-        <div>
-        <input type="text" class="form-control" name="q" placeholder="Введите фразу для поиска">
+                </ul>
+                <form class="d-flex" action="{{ url_for('posts.search')}}">
+                    <input class="form-control me-2" name='q' type="search" placeholder="Поиск" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Найти</button>
+                </form>
             </div>
-        <div class="input-group-append">
-        <input type="submit" class="btn_search" value="Поиск">
-         </div>
-    </form>
-</div>
+        </div>
+    </nav>
 
-</header>
+

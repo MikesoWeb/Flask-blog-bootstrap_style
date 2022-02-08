@@ -39,7 +39,7 @@ class LoginForm(FlaskForm):
 
 class AddCommentForm(FlaskForm):
     body = StringField("Ваш комментарий", validators=[InputRequired()])
-    submit = SubmitField("Опубликовать")
+    submit = SubmitField("Комментировать")
 
 
 class UpdateAccountForm(FlaskForm):
@@ -72,7 +72,7 @@ class RequestResetForm(FlaskForm):
         user = User.query.filter_by(email=email.data).first()
         if user is None:
             flash('Нет аккаунта с такой электронной почтой', 'danger')
-            raise ValidationError('There is no account with that email. You must register first')
+            raise ValidationError('Нет аккаунта с такой электронной почтой')
 
 
 class ResetPasswordForm(FlaskForm):
