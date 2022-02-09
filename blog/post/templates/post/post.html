@@ -1,19 +1,18 @@
 {% extends 'layout.html' %}
 {% from 'bootstrap5/form.html' import render_form %}
 {% from 'bootstrap5/form.html' import render_field %}
-{% block content %}
+{% block main_body %}
 
-<div class="row h100 mt-5">
+<div class="row mt-3">
     <div class="col-8 m-auto">
-
-        <div class="row border border-info d-flex justify-content-between">
-            <div class="col-4">
+        <div class="row d-flex justify-content-between">
+            <div class="col">
                 <img src="{{ url_for('static', filename='profile_pics/'  + 'users/' + post.author.username + '/account_img/' + post.author.image_file) }}"
-                     alt="" class="mr-3 mt-3 rounded-circle" style="width:40px;">
-                <a class="mr-2" href="{{ url_for('users.user_posts', username=post.author.username)}}">{{
-                    post.author.username }}</a>
-                <small class="text-muted">{{ post.date_posted.strftime('%d.%m.%Y-%H.%M') }}</small> <a
-                    href="{{ url_for('posts.category', category_str=post.category) }}">{{ post.category }}</a>
+                     alt="" class="rounded-circle align-self-center" style="width:40px;">
+                <a class="mr-2" href="{{ url_for('users.user_posts', username=post.author.username)}}">
+                    {{ post.author.username }}</a>
+                <small class="text-muted">{{ post.date_posted.strftime('%d.%m.%Y-%H.%M') }}</small>
+                <a href="{{ url_for('posts.category', category_str=post.category) }}">{{ post.category }}</a>
             </div>
 
             <div class="col-auto">
@@ -28,51 +27,74 @@
 
         </div>
 
-        <div class="row d-flex justify-content-center">
-            <div class="col-auto">
+        <div class="row">
+            <div class="col-12 mt-2">
                 <h2 class="article-title"> {{ post.title|safe }}</h2>
-                <img src="{{ image_file }}" alt="post_img" style="width: 500px">
-                <p class="article-content" align="left">{{ post.content|safe}}</p>
+            </div>
+            <div class="row d-flex justify-content-between mt-2 mb-2">
+                <div class="col-8">
+                    <p class="article-content" align="left">{{ post.content|safe}}</p>
+                </div>
+                <div class="col-auto d-flex">
+                    <img src="{{ image_file }}" alt="post_img" style="width: 300px; align-self:center">
+                </div>
             </div>
         </div>
-
-        <div class="row d-flex justify-content-around">
-            {% for i in post.tags %}
-            {% if post.author == current_user %}
-            <div class="col-auto">
-
-                <div class="tag"><b><a href="{{ url_for('posts.tag', tag_str=i.name) }}">{{ i.name }}</a></b></div>
-                <div class="delete_tag"><a href="{{ url_for( 'posts.delete_tag', tag_id=i.id) }}">Удалить</a></div>
-            </div>
-
-            {% else %}
-            <div class="tag"><b><a href="{{ url_for('posts.tag', tag_str=i.name) }}">{{ i.name }}</a></b></div>
-            {% endif %}
-
-            {% endfor %}
-        </div>
-
     </div>
-</div>
-
-
-<div class="row">
-    <div class="col-8 m-auto">
-        {% if post.author == current_user %}
-
-        {{ render_field(form_add_tag.tag_form, placeholder='Еcли несколько тегов, то через слеш /') }}
-        {{ render_field(form_add_tag.submit) }}
-        {% else %}
-        {% endif %}
-    </div>
-    >
     <div class="row">
-        <div class="col-8 d-flex justify-content-between border border-danger  m-auto">
+        <div class="col-8 d-flex justify-content-between m-auto">
             <div class="left_side_stat_post">&#128065; {{ post.views }}</div>
             <div class="right_side_stat_post">&#10084; {{ post.likes }}</div>
         </div>
 
     </div>
+
+    <!--    TAGS-->
+
+    <div class="row d-flex justify-content-center">
+        {% for i in post.tags %}
+        {% if post.author == current_user %}
+
+        <div class="col-auto">
+            <div class="row d-flex justify-content-between">
+                <a href="{{ url_for('posts.tag', tag_str=i.name) }}">{{ i.name }}</a>
+            </div>
+            <div class="text-center">
+                <a href="{{ url_for( 'posts.delete_tag', tag_id=i.id) }}" class="text-danger">Удалить</a>
+            </div>
+
+
+            {% else %}
+            <div class="col-auto">
+
+                <div class="row d-flex justify-content-between">
+                    <a href="{{ url_for('posts.tag', tag_str=i.name) }}">{{ i.name }}</a>
+                </div>
+            </div>
+            {% endif %}
+
+        </div>
+
+
+        {% endfor %}
+    </div>
+</div>
+
+
+<div class="row mt-3">
+    <div class="col-8 m-auto">
+        {% if post.author == current_user %}
+
+        <form method="post">
+            {{ form_add_tag.csrf_token() }}
+            {{ render_field(form_add_tag.tag_form, placeholder='Еcли несколько тегов, то через слеш /') }}
+            {{ render_field(form_add_tag.submit, button_size='sm') }}
+            {% else %}
+            {% endif %}
+        </form>
+    </div>
+
+
     <!-- Modal -->
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
          aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -99,12 +121,11 @@
 
 
     <!--    COMMENT -->
-
     <div class="row">
         <div class="col-8 m-auto">
 
             <form method="POST" action="{{url_for('posts.post', slug=post.slug)}}">
-                {{ render_form(form_add_comment, horizontal_columns=('lg', 5, 10)) }}
+                {{ render_form(form_add_comment, horizontal_columns=('lg', 5, 10), button_size='sm') }}
             </form>
         </div>
 

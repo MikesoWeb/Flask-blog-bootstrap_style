@@ -1,18 +1,15 @@
 {% extends 'layout.html' %}
-
-
-{% block main_page %}
+{% block main_body %}
 <div class="row h-100">
 
-
     <div class="col-12 d-flex justify-content-center">
-        <img src="{{ url_for('static', filename='Avatars/user1.jpg') }}" alt="" class="rounded-circle"> <br>
+        <img src="{{ url_for('static', filename='img/logo.jpg') }}" alt="" class="rounded-circle" style="height:300px; align-self: center"> <br>
     </div>
-    <div class="col-12 d-flex justify-content-center m-auto">
-        <small class="align-self-center" style="font-family: 'Marck Script', cursive; font-size: 100px;">Mikhail Terekhov</small>
+    <div class="col-12 d-flex justify-content-center">
+        <small class="align-self-center" style="font-family: 'Marck Script', cursive; font-size: 100px; align-self: center;">Full Stack development </small>
     </div>
 
 </div>
-{% endblock main_page %}
+{% endblock  %}
 
 

@@ -26,9 +26,12 @@
         flask-login
         flask-sqlalchemy
         flask-bcrypt
+        flask-babel
+        bootstrap-flask
         python-dotenv
         email-validator
         ...
+        
 
 
 В файле requirements.txt находятся зависимости проекта. 
@@ -45,5 +48,7 @@
 Или на linux запускаем run
 
 
+    Стили блога переписаны полностью на bootstrap 5
 
-Михаил Терехов, 2021 год
+
+**_Михаил Терехов, 2021 год_**

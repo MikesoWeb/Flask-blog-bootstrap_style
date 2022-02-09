@@ -10,7 +10,7 @@ class PostForm(FlaskForm):
     title = StringField('Заголовок', validators=[DataRequired()])
     content = TextAreaField('Статья', validators=[DataRequired()])
     category = SelectField('Категории', choices=AVAILABLE_CATEGORY_POSTS)
-    tag_form = StringField('Тэг')
+    tag_form = StringField('Добавить тег к статье')
     picture = FileField('Изображение (png, jpg)', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Опубликовать')
 

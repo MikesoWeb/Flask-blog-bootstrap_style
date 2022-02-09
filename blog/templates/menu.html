@@ -19,7 +19,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('users.account') }}">Аккаунт</a>
                     </li>
-                    {% if current_user.is_admin %}
+                    {% if current_user.is_admin or current_user.is_moder %}
 
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('admin.admin_panel') }}">Админка</a>

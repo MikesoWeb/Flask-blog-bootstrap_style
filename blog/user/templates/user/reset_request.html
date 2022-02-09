@@ -1,13 +1,12 @@
 {% extends 'layout.html' %}
 {% from 'bootstrap5/form.html' import render_form %}
-{% block main_page %}
+{% block main_body %}
 
 <div class="row h-100">
-    <div class="col-4 m-auto align-self-center">
+    <div class="col-4 align-self-center m-auto">
                     <h3 class="text-primary">Сброс пароля</h3>
 
-            {{ render_form(form, horizontal_columns=('lg', 2, 100), button_style='btn btn-outline-primary',
-            button_size='md') }}
+            {{ render_form(form, form_type='basic') }}
 
 
         </div>

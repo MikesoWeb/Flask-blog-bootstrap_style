@@ -1,13 +1,13 @@
 {% extends 'layout.html' %}
 {% from 'bootstrap5/pagination.html' import render_pagination %}
-{% block content %}
+{% block main_body %}
 
 {% if not all_posts %}
 <div class="row h-100 mt-5">
     <div class="col-12 text-center">
         <h3>Блог пустой</h3>
         <div class="row">
-            <div class="col">
+            <div class="col-12">
                 <button class="btn btn-outline-primary"><a class="text-decoration-none"
                                                            href="{{ url_for('posts.new_post') }}">Написать
                     статью</a>
@@ -19,42 +19,41 @@
 </div>
 {% else %}
 
-<div class="row h-100 mt-3">
-    <div class="col-12 text-center">
-        <button class="btn btn-outline-primary">
-            <a class="text-decoration-none" href="{{ url_for('posts.new_post') }}">Написать
-                статью</a>
-        </button>
+<div class="row h-100 mt-5">
 
-    </div>
 
-        <div class="col-6 align-self-center m-auto">
+
+
+        <div class="col-8 align-self-center m-auto">
     {% for post in posts.items %}
-
-
-        <img src="{{ url_for('static', filename='profile_pics/' + 'users/' + post.author.username + '/' + 'account_img' + '/' + post.author.image_file) }}"
-             alt="" class="mr-3 mt-3 rounded-circle" style="width:40px;">
+            <div class="row">
+                <div class="col">
+                    <img src="{{ url_for('static', filename='profile_pics/' + 'users/' + post.author.username + '/' + 'account_img' + '/' + post.author.image_file) }}"
+             alt="" class="mr-3 mt-3 rounded-circle" style="width:50px;">
         <a class="mr-2" href="{{ url_for('users.user_posts', username=post.author.username)}}">{{
             post.author.username }}</a>
 
         <small>{{ post.date_posted.strftime('%d.%m.%Y %H.%M') }}</small>
+                </div>
+            </div>
 
 
-        <h2><a class="article-title" href="{{ url_for('posts.post', slug=post.slug) }}">{{ post.title|safe
+
+        <h3><a class="article-title" href="{{ url_for('posts.post', slug=post.slug) }}">{{ post.title|safe
             }}</a>
-        </h2>
+        </h3>
         {% if post.content|count >= 100 or post %}
         <p class="article-content">{{ post.content|safe|truncate(250, True) }}</p>
 
         {% endif %}
 
-
-
     {% endfor %}
             </div>
 
+    </div>
+
 {% endif %}
-</div>
+
 {{ render_pagination(posts, prev='Назад', next='Следующая', align='center') }}
 
-{% endblock content %}
+{% endblock  %}

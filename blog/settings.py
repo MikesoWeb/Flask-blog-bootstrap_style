@@ -11,7 +11,7 @@ SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
 SQLALCHEMY_TRACK_MODIFICATIONS = os.environ.get('SQLALCHEMY_TRACK_MODIFICATIONS')
 BABEL_DEFAULT_LOCALE = 'ru'
 BOOTSTRAP_BTN_STYLE = 'btn btn-outline-primary'
-BOOTSTRAP_BTN_SIZE = 'lg'
+BOOTSTRAP_BTN_SIZE = 'sm'
 UPLOAD_FOLDER = os.path.join(basedir, 'blog', 'static', 'profile_pics', 'users')
 
 REMEMBER_COOKIE_DURATION = timedelta(seconds=60)

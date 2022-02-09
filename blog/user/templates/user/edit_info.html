@@ -1,14 +1,10 @@
 {% extends 'layout.html' %}
 {% from 'bootstrap5/form.html' import render_form %}
+{% block main_body %}
 
-{% block content %}
-
-<div class="row h-100">
-    <div class="row">
-        <div class="col-12 text-center mt-5"><h3>Редактировать пользователя {{ user.username}}</h3></div>
-    </div>
-
-    <div class="col-2">
+<h3 class="mt-3 text-center text-primary">Редактировать пользователя {{ user.username }}</h3>
+<div class="row h-100 justify-content-between">
+    <div class="col-1 align-self-center">
         <div class="d-flex justify-content-start col-3 m-2">
         <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
             <a href="{{ url_for('users.user_posts', username=user.username)  }}">
@@ -37,9 +33,14 @@
         </div>
 </div>
     </div>
-    <div class="col-6 m-auto align-self-center">
-        {{ render_form(form, button_size='lg') }}
-    </div>
+
+        <div class="col-6 m-auto align-self-center">
+            {% if (current_user.is_admin or current_user.is_moder) or current_user == user %}
+                {{ render_form(form, button_size='lg') }}
+            {% else %}
+                <h3 class="text-danger">У вас нет прав для редактирования пользователя</h3>
+            {% endif %}
+        </div>
 </div>
 
-{% endblock content %}
+{% endblock  %}

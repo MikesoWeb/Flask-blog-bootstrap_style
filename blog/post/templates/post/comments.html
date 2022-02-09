@@ -1,49 +1,51 @@
-     <div class="row mt-5 mb-5">
-            <div class="col-8 m-auto">
-                {% for i in comment %}
-                <div class="row d-flex justify-content-between mt-3 mb-3 border border-primary">
+<div class="row mt-5 mb-5">
+    <div class="col-10 m-auto">
+        {% for i in comment %}
+        <div class="row d-flex justify-content-between mt-3 mb-3 border border-primary">
 
-                    <div class="col-6 mt-2">
-                          <a href="{{ url_for('users.user_posts', username=i.username)}}">{{ i.username }}</a>
+
+            <div class="col-6 mt-2">
+                <a href="{{ url_for('users.user_posts', username=i.username)}}">{{ i.username }}</a>
+            </div>
+
+            <div class="col-auto mt-2">
+                {{ i.date_posted.strftime('%d.%m.%Y-%H.%M') }}
+            </div>
+
+
+            <div class="row text-center">
+                <div class="col-12">
+                    {{ i.body }}
+                </div>
+
+
+                <div class="row d-flex justify-content-between">
+                    <div class="col-6">
+                        <div class="left_stat_side">&#128065; {{ i.views }}</div>
                     </div>
-                    <div class="col-auto mt-2">
-                        <div class="right_comment_side">{{ i.date_posted.strftime('%d.%m.%Y-%H.%M') }}</div>
+                    <div class="col-auto">
+                        <div class="right_stat_side">&#10084; {{ i.likes }}</div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    {% if post.author == current_user or current_user.username == i.username or current_user.is_admin %}
+                    <div class="col-12 d-flex justify-content-around">
+                        <a href="{{ url_for( 'posts.update_comment', comment_id=i.id) }}"><p>Обновить комментарий</p>
+                        </a>
+                        <a href="{{ url_for( 'posts.delete_comment', comment_id=i.id) }}"><p>Удалить комментарий</p></a>
+                        {% else %}
+
+                        {% endif %}
                     </div>
 
+                </div>
 
-
-                        <div class="row text-center">
-                            <div class="col-12">
-
-                                   {{ i.body }}
-                            </div>
-                        </div>
-
-
-                        <div class="row d-flex justify-content-between">
-                            <div class="col-6">
-                                <div class="left_stat_side">&#128065; {{ i.views }}</div>
-                            </div>
-                            <div class="col-auto">
-                                <div class="right_stat_side">&#10084; {{ i.likes }}</div>
-                            </div>
-                        </div>
-
-
-
-            <div class="row">
-                {% if post.author == current_user or current_user.username == i.username or current_user.is_admin %}
-                <div class="col-12 d-flex justify-content-around">
-                <a href="{{ url_for( 'posts.update_comment', comment_id=i.id) }}"><p>Обновить комментарий</p></a>
-                <a href="{{ url_for( 'posts.delete_comment', comment_id=i.id) }}"><p>Удалить комментарий</p></a>
-                {% else %}
-
-                {% endif %}
-       </div>
+            </div>
         </div>
-        </div>
-
         {% endfor %}
 
-</div>
-</div>
+
+    </div>
+    </div>

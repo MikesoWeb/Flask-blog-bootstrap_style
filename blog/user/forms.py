@@ -9,12 +9,12 @@ from blog.settings import AVAILABLE_USER_TYPES
 
 
 class RegistrationForm(FlaskForm):
-    username = StringField('Имя пользователя', validators=[DataRequired(), Length(min=4, max=20)],
+    username = StringField('Имя пользователя', validators=[DataRequired(), Length(min=4, max=120)],
                            render_kw={'class': 'form-control'})
     email = StringField('Емайл', validators=[DataRequired(), Email()])
     password = PasswordField('Пароль', validators=[DataRequired()])
     confirm_password = PasswordField('Подтвердите пароль', validators=[DataRequired(), EqualTo('password')])
-    role = SelectField('Роли', choices=AVAILABLE_USER_TYPES)
+    # role = SelectField('Роли', choices=AVAILABLE_USER_TYPES)
     submit = SubmitField('Войти')
 
     def validate_username(self, username):

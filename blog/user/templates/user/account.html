@@ -1,8 +1,8 @@
 {% extends 'layout.html' %}
 
 
-{% block content %}
-<div class="row d-flex h-100 justify-content-center mt-5">
+{% block main_body %}
+<div class="row d-flex h-100 justify-content-around mt-5">
     <div class="col-2">
         <h5>Зарегистрированные: {{ users|count }}</h5>
         <ol class="list-unstyled">
@@ -31,7 +31,7 @@
     </div>
 
 
-    <div class="col-6">
+    <div class="col-auto">
         <div class="list_posts">
             <h5>Список ваших статей: </h5>
 
@@ -47,7 +47,7 @@
     </div>
     <div class="col-auto">
 
-        <img class="account-img" src="{{ image_file }}" style="width:100px">
+        <img class="account-img " src="{{ image_file }}" style="width:250px">
         <div class="media-body">
             {% if current_user.is_admin %}
             <h4 class="account-heading;" style="color: red;">{{ current_user.username }}</h4>
@@ -65,7 +65,14 @@
             {% endif %}
 
             <!-- FORM HERE -->
-
+            <button class="btn btn-outline-info"><a class="text-decoration-none"
+                                                           href="{{ url_for('posts.new_post') }}">Новый пост</a>
+            </button>
+            <br>
+            <br>
+            <button class="btn btn-outline-primary"><a class="text-decoration-none"
+                                                           href="{{ url_for('users.edit_user', username=current_user.username) }}">Редактировать</a>
+                </button>
             </div>
         </div>
 
@@ -75,6 +82,6 @@
 
 
 
-{% endblock content %}
+{% endblock  %}
 
 

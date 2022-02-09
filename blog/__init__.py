@@ -10,7 +10,6 @@ from flask_msearch import Search
 from flask_babelex import Babel
 from flask_bootstrap import Bootstrap5
 
-
 db = SQLAlchemy()
 bcrypt = Bcrypt()
 migrate = Migrate()
@@ -30,7 +29,7 @@ class DashBoardView(AdminIndexView):
     @login_required
     @expose('/')
     def admin_panel(self):
-        if not current_user.is_admin:
+        if not (current_user.is_admin or current_user.is_moder):
             flash('У вас нет доступа к административной части блога', 'danger')
             abort(403)
         from blog.models import User

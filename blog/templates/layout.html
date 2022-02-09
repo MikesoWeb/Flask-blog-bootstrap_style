@@ -1,24 +1,22 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-
+    {% from 'bootstrap5/utils.html' import render_messages %}
     {% block head %}
     <meta charset="UTF-8">
     <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='icon/favicon.ico') }}">
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">-->
+    <!--    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">-->
 
     {% block styles %}
     {{ bootstrap.load_css() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Rubik+Beastly&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Marck+Script&family=Rubik+Beastly&display=swap');
+
 
     </style>
 
     {% endblock styles %}
-
-
     {% block title %}
 
     <title>{{ title if title else 'Flask-blog' }}</title>
@@ -29,58 +27,41 @@
 
 <body>
 
+<!--MENU-->
+{% block menu %}
 
-    {% block menu %}
+{% include 'menu.html' %}
 
-        {% include 'menu.html' %}
+{% endblock menu %}
 
-    {% endblock menu %}
+<!--WRAPPER-->
+<div class="wrapper">
+    <div class="row">
+        <div class="col-md-12 text-center">
 
-    <div class="wrapper">
+            {{ render_messages() }}
 
-        <main role="main" class="#">
-            <div class="row">
-                <div class="col-md-12">
-                    {% block flash %}
-                    {% with messages = get_flashed_messages(with_categories=True) %}
+            <div class="content">
 
-                    {% if messages %}
-                    {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">
-                        {{ message }}
-                    </div>
-                    {% endfor %}
-                    {% endif %}
-
-                    {% endwith %}
-                    {% endblock flash %}
-
-                    {% block content %}
-                    {% endblock content %}
-                </div>
             </div>
-
-        </main>
-
+        </div>
     </div>
 
-    <!--MAIN_PAGE-->
-    {% block main_page %}
-    <div class="content">
 
-        </div>
-    {% endblock main_page %}
+</div>
 
+{% block main_body %}
+{% endblock main_body %}
 
-    <!--FOOTER-->
-    {% block footer %}
+<!--FOOTER-->
+{% block footer %}
 
-    <footer class="footer">Все права защищены!<br>
-        &#169; Терехов Михаил 2021
+<footer class="footer">Все права защищены!<br>
+    &#169; Терехов Михаил 2021
 
-    </footer>
+</footer>
 
-    {% endblock footer %}
+{% endblock footer %}
 
 <!--SCRIPT-->
 {% block scripts %}

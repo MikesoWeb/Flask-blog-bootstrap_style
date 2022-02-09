@@ -1,22 +1,22 @@
 {% extends 'layout.html' %}
 {% from 'bootstrap5/form.html' import render_form %}
-{% block main_page %}
+{% block main_body %}
 
 <div class="row h-100">
     <div class="col-4 m-auto align-self-center">
         <h3 class="text-primary">Войти</h3>
 
-        {{ render_form(form, button_size='lg') }}
+        {{ render_form(form, button_size='md') }}
 
         <div class="row d-flex justify-content-between text-end">
             <div class="col">
                 <small class="text-muted">
-            <a href="{{ url_for('users.reset_request') }}">Забыли пароль?</a>
-        </small>
+                    <a href="{{ url_for('users.reset_request') }}">Забыли пароль?</a>
+                </small>
 
-        <small class="text-muted">
-            <a href="{{ url_for('users.register')}}"> Нужен аккаунт?</a>
-        </small>
+                <small class="text-muted">
+                    <a href="{{ url_for('users.register')}}"> Нужен аккаунт?</a>
+                </small>
             </div>
 
         </div>
@@ -25,4 +25,4 @@
 </div>
 
 
-{% endblock main_page %}
+{% endblock %}

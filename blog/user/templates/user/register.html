@@ -1,12 +1,14 @@
 {% extends 'layout.html' %}
 {% from 'bootstrap5/form.html' import render_form %}
-{% block main_page %}
+{% block main_body %}
 
-    <div class="row h-100">
-        <div class="col-4 m-auto align-self-center">
-            <h2 class="text-primary">Регистрация</h2>
-                {{ render_form(form, button_size='lg') }}
-        </div>
+<div class="row h-100">
+    <div class="col-4 m-auto align-self-center">
+        <h3 class="text-primary">Регистрация</h3>
+
+        {{ render_form(form, button_size='md', form_inline_classes='align-self-center') }}
+
     </div>
 
-{% endblock main_page %}
+</div>
+{% endblock  %}

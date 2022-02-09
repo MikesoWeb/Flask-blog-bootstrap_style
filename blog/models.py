@@ -20,7 +20,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120), unique=True, nullable=False)
     image_file = db.Column(db.String(120), nullable=False, default='default.jpg')
     password = db.Column(db.String(120), nullable=False)
-    role = db.Column(db.String(40), index=True)
+    role = db.Column(db.String(40), index=True, default='User', nullable=False)
     last_seen = db.Column(db.DateTime)
     user_status = db.Column(db.String(140), nullable=True, default='Лучший пользователь проекта')
 

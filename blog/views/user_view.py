@@ -50,8 +50,6 @@ class UserView(ModelView):
         'password': dict(validators=[validators.DataRequired()]),
     }
 
-
-
     form_choices = {
         'role': AVAILABLE_USER_TYPES,
     }
@@ -111,7 +109,7 @@ class UserView(ModelView):
         return super(UserView, self).edit_form(obj)
 
     def on_model_change(self, view, model, is_created):
-        if  is_created:
+        if is_created:
             model.password = bcrypt.generate_password_hash(model.password)
         else:
             view.password.data = model.password
