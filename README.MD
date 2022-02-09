@@ -31,13 +31,22 @@
         python-dotenv
         email-validator
         ...
-        
 
 
 В файле requirements.txt находятся зависимости проекта. 
 Установка зависимостей:
     
     pip install -r requirements.txt
+
+В папке блог создать файл .env и записать в него тестовые данные:
+
+        FLASK_ENV=development
+        FLASK_APP=run.py
+        SQLALCHEMY_DATABASE_URI=sqlite:///blog.db
+        SQLALCHEMY_TRACK_MODIFICATIONS=True
+        EMAIL_USER=testforytlesson@gmail.com
+        EMAIL_PASS=Qweqaz8485psyX
+
 
 
 Для запуска проекта используется файл
@@ -48,7 +57,4 @@
 Или на linux запускаем run
 
 
-    Стили блога переписаны полностью на bootstrap 5
-
-
-**_Михаил Терехов, 2021 год_**
+**_Михаил Терехов, 2022 год_**
