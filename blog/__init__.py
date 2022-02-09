@@ -10,6 +10,7 @@ from flask_msearch import Search
 from flask_babelex import Babel
 from flask_bootstrap import Bootstrap5
 
+
 db = SQLAlchemy()
 bcrypt = Bcrypt()
 migrate = Migrate()

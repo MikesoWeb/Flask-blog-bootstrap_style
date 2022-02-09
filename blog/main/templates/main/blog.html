@@ -51,9 +51,10 @@
             </div>
 
     </div>
+ {{ render_pagination(posts, prev='Назад', next='Следующая', align='center') }}
 
 {% endif %}
 
-{{ render_pagination(posts, prev='Назад', next='Следующая', align='center') }}
+
 
 {% endblock  %}

@@ -206,11 +206,27 @@ def add_admin(username):
     ad_admin = User.query.filter_by(username=username).first()
     if not ad_admin.is_admin:
         ad_admin.role = 'Admin'
+        ad_admin.user_status = 'Администратор проекта'
         db.session.commit()
         flash('Пользователь получил роль администратора', 'success')
         return redirect(url_for('users.account'))
     else:
         flash('Пользователь уже обладает правами администратора', 'success')
+        return redirect(url_for('users.account'))
+
+
+@users.route('/api/del_admin/<string:username>', methods=['GET', 'POST'])
+@login_required
+def delete_admin(username):
+    del_admin = User.query.filter_by(username=username).first()
+    if del_admin.is_admin:
+        del_admin.role = 'User'
+        del_admin.user_status = 'Обычный пользователь'
+        db.session.commit()
+        flash('Пользователь получил роль обычного пользователя', 'success')
+        return redirect(url_for('users.account'))
+    else:
+        flash('Вы уже обычный пользователь', 'success')
         return redirect(url_for('users.account'))
 
 

@@ -102,9 +102,15 @@ def search():
     try:
         keyword = request.args.get('q')
         search_posts = Post.query.msearch(keyword, fields=['title', 'content'], limit=6)
-        return render_template('post/search.html', search_posts=search_posts, title='Поиск')
-    except AttributeError:
-        return redirect(url_for('users.account'))
+        if keyword and search_posts:
+            return render_template('post/search.html', search_posts=search_posts, title='Поиск')
+
+        else:
+            flash('Введите что-то в поле поиска', 'danger')
+            return redirect(url_for('main.blog'))
+
+    except AttributeError as e:
+        raise e
 
 
 @posts.route('/post/<string:slug>/update', methods=['GET', 'POST'])
