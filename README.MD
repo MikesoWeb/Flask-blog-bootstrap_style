@@ -1,6 +1,21 @@
 Приветствую, друзья. Меня зовут **_Михаил Терехов_** и я начинающий **разработчик
 на замечательном Python**
 
+Upd: 12.09 2022
+
+    Добавил naming_convention в файл __init__.py 
+    Внес изменения в модель User и модель Comment чтобы в комментариях выводить аватар пользователя,
+    написавшего коммментарий (файл comments.html)
+
+    Если после выскочит ошибка что при выводе image_file получает None  это потому что нужно в поле комментария
+    поставить user_id, например 1.  Или установить в модели default для пользователя, написавшего комментарий.
+    Ну или просто снесите базу и создайте заново :D
+    
+Так же почитайте [мою статью по Flask-Migrate](https://vk.com/python_for_me?w=wall-184890296_572%2Fall)
+и все станет ясно и миграции flask станут вашим другом
+    
+#############################################
+
 На данном этапе я создаю **свой блог с нуля на Python**, используя **веб-фреймворк flask**
 
 У меня есть своя [группа ВК](https://vk.com/python_for_me), где я публикую свои мнения,
@@ -40,12 +55,12 @@
 
 В папке блог создать файл .env и записать в него тестовые данные:
 
-        FLASK_ENV=development
-        FLASK_APP=run.py
-        SQLALCHEMY_DATABASE_URI=sqlite:///blog.db
-        SQLALCHEMY_TRACK_MODIFICATIONS=True
-        EMAIL_USER=testforytlesson@gmail.com
-        EMAIL_PASS=Qweqaz8485psyX
+FLASK_ENV=development
+FLASK_APP=run.py
+SQLALCHEMY_DATABASE_URI=sqlite:///blog.db
+SQLALCHEMY_TRACK_MODIFICATIONS=True
+EMAIL_USER=testforytlesson@gmail.com
+EMAIL_PASS=Qweqaz8485psyX
 
 
 
@@ -53,8 +68,11 @@
 
     run.py
 
-Или на windows запускаем run
-Или на linux запускаем run
+!Внимание!  База данных при запуске run, как указано ниже должна быть уже создана
+    Или на windows запускаем run
+    Или на linux запускаем run
+
+При запуске python run.py база будет создана, так как передается весь контекст приложения!
 
 
 **_Михаил Терехов, 2022 год_**

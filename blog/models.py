@@ -23,7 +23,7 @@ class User(db.Model, UserMixin):
     role = db.Column(db.String(40), index=True, default='User', nullable=False)
     last_seen = db.Column(db.DateTime)
     user_status = db.Column(db.String(140), nullable=True, default='Лучший пользователь проекта')
-
+    comment = db.relationship('Comment', backref='author_comment', lazy=True)
     posts = db.relationship('Post', backref='author', lazy=True)
 
     # https://itsdangerous.palletsprojects.com/en/2.0.x/jws/
@@ -88,6 +88,7 @@ class Comment(db.Model):
     username = db.Column(db.String(120), unique=False, nullable=False)
     body = db.Column(db.Text(200), nullable=False)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=True)
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id', ondelete='CASCADE'), nullable=False)
 
     def __repr__(self):

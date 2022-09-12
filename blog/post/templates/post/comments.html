@@ -5,7 +5,16 @@
 
 
             <div class="col-6 mt-2">
-                <a href="{{ url_for('users.user_posts', username=i.username)}}">{{ i.username }}</a>
+                <a href="{{ url_for('users.user_posts', username=i.username)}}">
+
+                    <img src="{{ url_for('static', filename='profile_pics/'  + 'users/' +  i.username  + '/account_img/' +  i.author_comment.image_file ) }}"
+                         alt="" class="rounded-circle align-self-center" style="width:40px;">
+
+
+                    {{ i.username }}
+
+
+                </a>
             </div>
 
             <div class="col-auto mt-2">
@@ -48,4 +57,4 @@
 
 
     </div>
-    </div>
+</div>
