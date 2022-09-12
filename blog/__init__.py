@@ -10,14 +10,16 @@ from flask_msearch import Search
 from flask_babelex import Babel
 from flask_bootstrap import Bootstrap5
 from sqlalchemy import MetaData
+from flask_wtf.csrf import CSRFProtect
+import secrets, os
 
 metadata = MetaData(
-  naming_convention={
-    'pk': 'pk_%(table_name)s',
-    'fk': 'fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s',
-    'ix': 'ix_%(table_name)s_%(column_0_name)s',
-    'uq': 'uq_%(table_name)s_%(column_0_name)s',
-    'ck': 'ck_%(table_name)s_%(constraint_name)s',
+    naming_convention={
+        'pk': 'pk_%(table_name)s',
+        'fk': 'fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s',
+        'ix': 'ix_%(table_name)s_%(column_0_name)s',
+        'uq': 'uq_%(table_name)s_%(column_0_name)s',
+        'ck': 'ck_%(table_name)s_%(constraint_name)s',
     }
 )
 
@@ -26,6 +28,8 @@ db = SQLAlchemy(metadata=metadata)
 bcrypt = Bcrypt()
 migrate = Migrate()
 bootstrap = Bootstrap5()
+csrf = CSRFProtect()
+
 
 login_manager = LoginManager()
 login_manager.login_view = 'users.login'
@@ -65,6 +69,8 @@ def create_app():
     app = Flask(__name__)
     admin.init_app(app)
     app.config.from_pyfile('settings.py')
+    app.config["SECRET_KEY"] = "secrets.token_hex(16)"
+    app.config["WTF_CSRF_SECRET_KEY"] = "secrets.token_hex(16)"
     db.init_app(app)
     bcrypt.init_app(app)
     babel.init_app(app)
@@ -73,6 +79,7 @@ def create_app():
     mail.init_app(app)
     search.init_app(app)
     bootstrap.init_app(app)
+    csrf.init_app(app)
 
     from blog.models import User, Post, Comment, Tag
     from blog.views.user_view import UserView
