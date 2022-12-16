@@ -203,10 +203,10 @@ def reset_token(token):
 @users.route('/api/add_admin/<string:username>')
 @login_required
 def add_admin(username):
-    ad_admin = User.query.filter_by(username=username).first()
-    if not ad_admin.is_admin:
-        ad_admin.role = 'Admin'
-        ad_admin.user_status = 'Администратор проекта'
+    user = User.query.filter_by(username=username).first()
+    if not user.is_admin:
+        user.role = 'Admin'
+        user.user_status = 'Администратор проекта'
         db.session.commit()
         flash('Пользователь получил роль администратора', 'success')
         return redirect(url_for('users.account'))

@@ -11,7 +11,7 @@ from flask_babelex import Babel
 from flask_bootstrap import Bootstrap5
 from sqlalchemy import MetaData
 from flask_wtf.csrf import CSRFProtect
-import secrets, os
+from blog.settings import ConfigDebug
 
 metadata = MetaData(
     naming_convention={
@@ -68,9 +68,9 @@ admin = Admin(name='Admin Board', template_mode='bootstrap3', index_view=DashBoa
 def create_app():
     app = Flask(__name__)
     admin.init_app(app)
-    app.config.from_pyfile('settings.py')
-    app.config["SECRET_KEY"] = "secrets.token_hex(16)"
-    app.config["WTF_CSRF_SECRET_KEY"] = "secrets.token_hex(16)"
+    app.config.from_object(ConfigDebug)
+    # app.config["SECRET_KEY"] = "secrets.token_hex(16)"
+    # app.config["WTF_CSRF_SECRET_KEY"] = "secrets.token_hex(16)"
     db.init_app(app)
     bcrypt.init_app(app)
     babel.init_app(app)

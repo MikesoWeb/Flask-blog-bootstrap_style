@@ -6,9 +6,28 @@ from dotenv import load_dotenv
 basedir = os.path.abspath(os.path.dirname(__name__))
 load_dotenv(os.path.join(basedir, 'blog/.env'))
 
-# SECRET_KEY = os.urandom(36)
-SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
-SQLALCHEMY_TRACK_MODIFICATIONS = os.environ.get('SQLALCHEMY_TRACK_MODIFICATIONS')
+
+class Config(object):
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
+    SQLALCHEMY_TRACK_MODIFICATIONS = os.environ.get('SQLALCHEMY_TRACK_MODIFICATIONS')
+    SECRET_KEY = os.urandom(32)
+    TEMPLATES_AUTO_RELOAD = False
+    DEBUG = False
+    TESTING = False
+    
+
+
+class ConfigDebug(Config):
+    DEBUG = True
+    TEMPLATES_AUTO_RELOAD = True   
+    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
+
+
+class ConfigProd(Config):
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///prod.db'
+    SERVER_NAME = 'localhost:5667'
+
+
 BABEL_DEFAULT_LOCALE = 'ru'
 BOOTSTRAP_BTN_STYLE = 'btn btn-outline-primary'
 BOOTSTRAP_BTN_SIZE = 'sm'
