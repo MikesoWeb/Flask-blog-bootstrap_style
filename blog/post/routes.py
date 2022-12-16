@@ -84,7 +84,7 @@ def post(slug):
 
     if request.method == 'POST' and form_comment.validate_on_submit():
         username = current_user.username
-        comment = Comment(username=username, body=form_comment.body.data, post_id=post.id)
+        comment = Comment(username=username, body=form_comment.body.data, post_id=post.id, author_id=current_user.id)
         db.session.add(comment)
         db.session.commit()
         flash('Комментарий к посту был добавлен', "success")
