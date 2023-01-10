@@ -23,8 +23,8 @@ metadata = MetaData(
     }
 )
 
-db = SQLAlchemy(metadata=metadata)
-
+# db = SQLAlchemy(metadata=metadata)
+db = SQLAlchemy(metadata=metadata, session_options={"autoflush": False})
 bcrypt = Bcrypt()
 migrate = Migrate()
 bootstrap = Bootstrap5()
@@ -70,7 +70,7 @@ def create_app():
     admin.init_app(app)
     app.config.from_object(ConfigDebug)
     # app.config["SECRET_KEY"] = "secrets.token_hex(16)"
-    # app.config["WTF_CSRF_SECRET_KEY"] = "secrets.token_hex(16)"
+    app.config["WTF_CSRF_SECRET_KEY"] = "secrets.token_hex(16)"
     db.init_app(app)
     bcrypt.init_app(app)
     babel.init_app(app)

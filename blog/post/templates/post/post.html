@@ -51,32 +51,30 @@
 
     <!--    TAGS-->
 
-    <div class="row d-flex justify-content-center">
+    <div class="container d-flex justify-content-center">
         {% for i in post.tags %}
-        {% if post.author == current_user %}
-
-        <div class="col-auto">
-            <div class="row d-flex justify-content-between">
-                <a href="{{ url_for('posts.tag', tag_str=i.name) }}">{{ i.name }}</a>
+            {% if post.author == current_user %}
+            <div class="row">
+                <div class="col-auto">                
+                    <div class="d-flex mx-3">
+                        <a href="{{ url_for('posts.tag', tag_str=i.name) }}">{{ i.name }}</a>
+                    
+                        <a href="{{ url_for( 'posts.delete_tag', tag_id=i.id) }}" class="text-danger">Удалить</a>
+                    </div>
+                </div>
             </div>
-            <div class="text-center">
-                <a href="{{ url_for( 'posts.delete_tag', tag_id=i.id) }}" class="text-danger">Удалить</a>
-            </div>
-
 
             {% else %}
             <div class="col-auto">
-
                 <div class="row d-flex justify-content-between">
-                    <a href="{{ url_for('posts.tag', tag_str=i.name) }}">{{ i.name }}</a>
+                    <a class="mx-2" href="{{ url_for('posts.tag', tag_str=i.name) }}">{{ i.name }}</a>
                 </div>
             </div>
             {% endif %}
-
-        </div>
-
-
+      
         {% endfor %}
+    
+    </div>
     </div>
 </div>
 
@@ -94,6 +92,7 @@
         </form>
     </div>
 
+    
 
     <!-- Modal -->
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -109,7 +108,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                    <form action="{{ url_for('posts.delete_post', slug=post.slug) }}" method="post">
+                    <form action="{{ url_for('posts.delete_post', slug=post.slug) }}" method="delete">
                         <input type="submit" class="btn btn-danger" value="Удалить">
 
                     </form>

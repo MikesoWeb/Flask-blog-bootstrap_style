@@ -8,7 +8,7 @@ from slugify import slugify
 from blog import db
 from blog.models import Post, Comment, Tag
 from blog.post.forms import PostForm, PostUpdateForm, CommentUpdateForm
-from blog.post.utils import save_picture_post_author
+from blog.post.utils import save_picture_post_author, form_path_user_image
 from blog.user.forms import AddCommentForm
 
 posts = Blueprint('posts', __name__, template_folder='templates')
@@ -46,9 +46,9 @@ def new_post():
         flash('Такой заголовок уже существует', 'danger')
         db.session.rollback()
 
+    # form_path_user_image()
     image_file = url_for('static',
-                         filename=f'profile_pics/' + 'users/' + current_user.username + '/post_images/'
-                                  + current_user.image_file)
+                         filename=form_path_user_image(current_user.username) + current_user.image_file)
     return render_template('post/create_post.html', title='Новая статья',
                            form=form, legend='Новая статья', image_file=image_file)
 
@@ -57,18 +57,13 @@ def new_post():
 # https://stackoverflow.com/questions/62065605/how-to-add-a-list-of-tags-to-a-flask-wtforms-jinja2-form
 # https://gist.github.com/M0r13n/71655c53b2fbf41dc1db8412978bcbf9
 
-@posts.route('/post/<string:slug>', methods=['GET', 'POST'])
-@login_required
-def post(slug):
-    post = Post.query.filter_by(slug=slug).first()
-    comment = Comment.query.filter_by(post_id=post.id).order_by(db.desc(Comment.date_posted)).all()
-    print(comment)
+def set_view_post(post):
+    # Инкрементит количество просмотров поста
+    # Нужно сделать защиту от накруток!
     post.views += 1
+    db.session.commit()
 
-    form_post = PostForm()
-    form_comment = AddCommentForm()
-    if request.method == 'POST':
-        def add_tag():
+def add_tag(form_post, post):
             name = form_post.tag_form.data
             if name:
                 name = name.split('/')
@@ -80,7 +75,22 @@ def post(slug):
                 flash('Тег к посту был добавлен', "success")
                 return redirect(url_for('posts.post', slug=post.slug))
 
-        add_tag()
+@posts.route('/post/<string:slug>', methods=['GET', 'POST'])
+@login_required
+def post(slug):
+    post = Post.query.filter_by(slug=slug).first()
+    comment = Comment.query.filter_by(post_id=post.id).order_by(db.desc(Comment.date_posted)).all()
+    # print(comment)
+    
+    set_view_post(post)
+   
+
+    form_post = PostForm()
+    form_comment = AddCommentForm()
+    if request.method == 'POST':
+        
+        # Добавляем тег или список тегов к посту
+        add_tag(form_post, post)
 
     if request.method == 'POST' and form_comment.validate_on_submit():
         username = current_user.username
@@ -90,8 +100,11 @@ def post(slug):
         flash('Комментарий к посту был добавлен', "success")
         return redirect(url_for('posts.post', slug=post.slug))
     form_post.tag_form.data = ''
+    # form_path_user_image()
     image_file = url_for('static',
-                         filename=f'profile_pics/' + 'users/' + post.author.username + '/post_images/' + post.image_post)
+                        #  filename=f'profile_pics/' + 'users/' + post.author.username + '/post_images/' + post.image_post)
+                         filename=form_path_user_image(post.author.username) + post.image_post)
+    print(image_file)
     return render_template('post/post.html', title=post.title, post=post, image_file=image_file,
                            form_add_comment=form_comment, comment=comment, form_add_tag=form_post)
 
@@ -144,8 +157,10 @@ def update_post(slug):
     else:
         if request.method == 'POST':
             flash('Формат изображения должен быть "jpg", "png"', 'success')
+            
+    # test_user_image_file()
     image_file = url_for('static',
-                         filename=f'profile_pics/users/{current_user.username}/post_images/{post.image_post}')
+                         filename=form_path_user_image(current_user.username) + post.image_post)
 
     return render_template('post/update_post.html', title='Обновление ' + post.title,
                            form=form, legend='Обновить статью', image_file=image_file, post=post)
@@ -188,20 +203,24 @@ def tag(tag_str):
                            current_tag=current_tag, title='Статьи тега ' + current_tag.name)
 
 
-@posts.route('/post/<string:slug>/delete', methods=['POST', 'GET'])
+@posts.route('/post/<string:slug>/delete', methods=['DELETE', 'GET'])
 @login_required
 def delete_post(slug):
     post = Post.query.filter_by(slug=slug).first()
     if post.author != current_user:
         abort(403)
     try:
-
+        db.session.delete(post)
+        # form_path_user_image()
+        # os.unlink(url_for('static',
+        #                  filename=form_path_user_image(current_user.username) + post.image_post))
         os.unlink(
             os.path.join(current_app.root_path,
                          f'static/profile_pics/users/{current_user.username}/post_images/{post.image_post}'))
-        db.session.delete(post)
+        
     except:
-        db.session.delete(post)
+        db.session.delete(post) 
+        # print('Не могу удалить пост!')
 
     db.session.commit()
     flash('Данный пост был удален', 'success')

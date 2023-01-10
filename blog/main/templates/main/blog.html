@@ -21,10 +21,7 @@
 
 <div class="row h-100 mt-5">
 
-
-
-
-        <div class="col-8 align-self-center m-auto">
+        <div class="col-auto align-self-center m-auto">
     {% for post in posts.items %}
             <div class="row">
                 <div class="col">
@@ -51,7 +48,16 @@
             </div>
 
     </div>
- {{ render_pagination(posts, prev='Назад', next='Следующая', align='center') }}
+
+    {% if all_posts|count > per_page %}
+
+        {{ render_pagination(posts, prev='Назад', next='Следующая', align='center') }}
+
+    {% else %}
+
+    ...
+    
+    {% endif %}
 
 {% endif %}
 

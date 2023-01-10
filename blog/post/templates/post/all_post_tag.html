@@ -4,16 +4,17 @@
 
 <div class="row d-flex h-100 justify-content-center mt-5">
     <div class="col-auto">
-        <h3 class="text-info">Статьи тега: <small class="text-primary">{{ current_tag.name }}</small></h3>
+        <h3 class="text-info">Статьи c тегом: <small class="text-primary">{{ current_tag.name }}</small></h3>
 
             <ol>
-            {% for post in name_tags %}
+                {% for post in name_tags %}
 
-    <li><a href="{{ url_for('posts.post', slug=post.tag_post.slug) }}" style=" text-decoration: none;">
 
-        {{ post.tag_post.title|capitalize }}</a> {{ post.tag_post.author.username }}</li>
+                    <li><a href="{{ url_for('posts.post', slug=post.tag_post.slug) }}" style=" text-decoration: none;">
 
-    {% endfor %}
+                    {{ post.tag_post.title|capitalize }}</a> {{ post.tag_post.author.username }}</li>
+
+                {% endfor %}
             </ol>
 
 

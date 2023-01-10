@@ -3,8 +3,12 @@ from datetime import timedelta
 
 from dotenv import load_dotenv
 
+# Paths
 basedir = os.path.abspath(os.path.dirname(__name__))
-load_dotenv(os.path.join(basedir, 'blog/.env'))
+users_image_dir = 'static/profile_pics/users'
+UPLOAD_FOLDER = os.path.join(basedir, 'blog', users_image_dir)
+
+load_dotenv(os.path.join(basedir, '.env'))
 
 
 class Config(object):
@@ -19,19 +23,25 @@ class Config(object):
 
 class ConfigDebug(Config):
     DEBUG = True
+    TESTING = True
     TEMPLATES_AUTO_RELOAD = True   
     SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
 
 
 class ConfigProd(Config):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///prod.db'
-    SERVER_NAME = 'localhost:5667'
+    # SERVER_NAME = 'localhost:5667'
 
+
+# Bootstrap settings
 
 BABEL_DEFAULT_LOCALE = 'ru'
 BOOTSTRAP_BTN_STYLE = 'btn btn-outline-primary'
 BOOTSTRAP_BTN_SIZE = 'sm'
-UPLOAD_FOLDER = os.path.join(basedir, 'blog', 'static', 'profile_pics', 'users')
+
+
+
+
 
 REMEMBER_COOKIE_DURATION = timedelta(seconds=60)
 
