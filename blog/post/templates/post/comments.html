@@ -33,22 +33,23 @@
                     </div>
                     <div class="col-auto">
 
-                        <form action="{{ url_for('posts.add_like_comment', slug=post.slug) }}" method="put">
+                        <form action="{{ url_for('posts.add_like_comment', comment_id=i.id) }}" method="put">
                             <div class="right_stat_side my-3"><button class="button btn"> &#10084;</button> {{ i.likes }}</div>
                             </form>
+
 
                     </div>
                 </div>
 
 
-                    {% if post.author == current_user or current_user.username == i.username or current_user.is_admin %}
+                    {% if post.author == current_user or current_user.username == i.username %}
                     <div class="col-12 m-auto d-flex justify-content-end my-2">
                         <a href="{{ url_for( 'posts.update_comment', comment_id=i.id) }}"><button class="btn btn-warning btn-sm mx-2">Обновить</button>
                         </a>
                         <a href="{{ url_for( 'posts.delete_comment', comment_id=i.id) }}"><button class="btn btn-danger btn-sm">Удалить</button></a>
-                        {% else %}
+                    {% else %}
 
-                        {% endif %}
+                    {% endif %}
                     </div>
 
                 </div>

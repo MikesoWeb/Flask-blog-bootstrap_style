@@ -177,6 +177,7 @@ def update_post(slug):
 def update_comment(comment_id):
     comment = Comment.query.get_or_404(comment_id)
     form = CommentUpdateForm()
+    return_to_post = comment.comment_post.slug
     if current_user.is_admin or comment.username == current_user.username:
 
         if request.method == 'GET':
@@ -187,7 +188,10 @@ def update_comment(comment_id):
             db.session.commit()
             return redirect(url_for('posts.post', slug=comment.comment_post.slug))
     else:
+        flash('У вас нет доступа к этой функции', 'danger')
+        # redirect(url_for('posts.post', slug=return_to_post))
         abort(403)
+
     return render_template('post/update_comment.html', form_comment_update=form, title="Обновление комментария")
 
 
@@ -219,16 +223,15 @@ def add_like_post(slug):
     return redirect(url_for('posts.post', slug=post.slug))
 
 
-@posts.route('/post/<string:slug>/add_like_comment', methods=['GET', 'PUT'])
+@posts.route('/post/comment/<int:comment_id>/add_like_comment', methods=['GET', 'PUT'])
 @login_required
-def add_like_comment(slug):
-    post = Post.query.filter_by(slug=slug).first()
-    comment = Comment.query.filter_by(post_id=post.id).order_by(
-        db.desc(Comment.date_posted)).first()
+def add_like_comment(comment_id):
+    comment = Comment.query.get_or_404(comment_id)
     comment.likes += 1
     db.session.commit()
+    return_to_post = comment.comment_post.slug
     flash('Лайк к комментарию добавлен', 'success')
-    return redirect(url_for('posts.post', slug=post.slug))
+    return redirect(url_for('posts.post', slug=return_to_post))
 
 
 @posts.route('/post/<string:slug>/delete', methods=['DELETE', 'GET'])
@@ -270,7 +273,9 @@ def delete_comment(comment_id):
         db.session.commit()
         flash('Комментарий был удалён', 'success')
     else:
-        abort(403)
+        
+        flash('У вас нет доступа к этой функции', 'danger')
+        redirect(url_for('posts.post', slug=return_to_post))
     return redirect(url_for('posts.post', slug=return_to_post))
 
 
