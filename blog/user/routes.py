@@ -1,16 +1,16 @@
 import os
 import shutil
-from datetime import datetime
 
 import sqlalchemy
-from flask import Blueprint, render_template, flash, url_for, request, redirect, abort
-from flask_login import current_user, logout_user, login_required, login_user
+from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask_login import current_user, login_required, login_user, logout_user
 
 from blog import bcrypt, db
-from blog.models import User, Post
-from blog.settings import UPLOAD_FOLDER
-from blog.user.forms import RegistrationForm, LoginForm, UpdateAccountForm, ResetPasswordForm, RequestResetForm
-from blog.user.utils import save_picture, random_avatar, send_reset_email
+from blog.models import Post, User
+from blog.settings import USER_IMAGE_DIRECTORY, last_seen_user, upload_folder
+from blog.user.forms import (LoginForm, RegistrationForm, RequestResetForm,
+                             ResetPasswordForm, UpdateAccountForm)
+from blog.user.utils import random_avatar, save_picture, send_reset_email
 
 users = Blueprint('users', __name__, template_folder='templates')
 
@@ -77,7 +77,7 @@ def user_posts(username):
         .order_by(Post.date_posted.desc()) \
         .paginate(page=page, per_page=3)
 
-    return render_template('user/user_posts.html', title='Общий блог>', posts=posts, user=user)
+    return render_template('user/user_posts.html', title='Общий блог', posts=posts, user=user)
 
 
 @users.route('/user/action/<string:username>')
@@ -89,7 +89,7 @@ def action_user(username):
         .order_by(Post.date_posted.desc()) \
         .paginate(page=page, per_page=3)
 
-    return render_template('user/action_user.html', title='Общий блог>', posts=posts, user=user)
+    return render_template('user/action_user.html', title='Общий блог', posts=posts, user=user)
 
 
 @users.route('/user/edit/<string:username>', methods=['GET', 'POST'])
@@ -108,16 +108,26 @@ def edit_user(username):
         form.user_status.data = user.user_status
     # elif form.validate_on_submit():
     elif request.method == 'POST':
-        path_one = os.path.join(os.getcwd(), UPLOAD_FOLDER, user.username)
-        path_two = os.path.join(os.getcwd(), UPLOAD_FOLDER, form.username.data)
+        
+        
+        # 'c:\\Users\\mike\\Desktop\\FlaskLikeCount\\blog\\static/profile_pics/users/mike'
+        # 'c:\\Users\\mike\\Desktop\\FlaskLikeCount\\blog\\static/profile_pics/users/mikesoweb'
+        path_one = os.path.join(upload_folder(),  user.username)
+        path_two = os.path.join(upload_folder(), form.username.data)
+               
         os.rename(path_one, path_two)
-        user.username = form.username.data
+        
         user.email = form.email.data
+        
 
         user.user_status = form.user_status.data
 
         if form.picture.data:
-            user.image_file = save_picture(form.picture.data, user)
+            try:
+                user.image_file = save_picture(form.picture.data, user)
+            
+            except FileNotFoundError:
+                ...
         else:
             form.picture.data = user.image_file
 
@@ -128,7 +138,7 @@ def edit_user(username):
                          filename=f'profile_pics' + '/users/' + user.username + '/account_img/' +
                                   user.image_file)
 
-    return render_template('user/edit_info.html', title='Обновление>', image_file=image_file, form=form, posts=posts,
+    return render_template('user/edit_info.html', title='Обновление', image_file=image_file, form=form, posts=posts,
                            users=users, user=user)
 
 
@@ -141,7 +151,7 @@ def settings_user(username):
         .order_by(Post.date_posted.desc()) \
         .paginate(page=page, per_page=3)
 
-    return render_template('user/settings_user.html', title='Общий блог>', posts=posts, user=user)
+    return render_template('user/settings_user.html', title='Общий блог', posts=posts, user=user)
 
 
 @users.route('/user_delete/<string:username>', methods=['GET', 'POST'])
@@ -152,7 +162,7 @@ def delete_user(username):
         if user and not user.is_admin:
             db.session.delete(user)
             db.session.commit()
-            full_path = os.path.join(os.getcwd(), UPLOAD_FOLDER, user.username)
+            full_path = os.path.join(os.getcwd(), USER_IMAGE_DIRECTORY, user.username)
             shutil.rmtree(full_path)
 
             flash(f'Пользователь {username} был удалён!', 'info')
@@ -232,7 +242,6 @@ def delete_admin(username):
 
 @users.route('/logout')
 def logout():
-    current_user.last_seen = datetime.now()
-    db.session.commit()
+    last_seen_user(db, current_user)
     logout_user()
     return redirect(url_for('main.home'))

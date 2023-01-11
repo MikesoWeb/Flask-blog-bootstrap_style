@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed
-from wtforms import StringField, TextAreaField, SubmitField, FileField, SelectField
+from wtforms import (FileField, SelectField, StringField, SubmitField,
+                     TextAreaField)
 from wtforms.validators import DataRequired
 
 from blog.settings import AVAILABLE_CATEGORY_POSTS

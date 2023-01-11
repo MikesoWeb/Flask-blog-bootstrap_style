@@ -1,9 +1,10 @@
 import os
 
-from flask import url_for, Markup
+from flask import Markup, url_for
 from flask_admin import form
 from flask_admin.contrib.sqla import ModelView
 from wtforms import validators
+
 from blog import bcrypt
 from blog.settings import AVAILABLE_USER_TYPES
 

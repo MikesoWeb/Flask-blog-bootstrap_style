@@ -1,14 +1,16 @@
 import os
+
 import PIL
 import sqlalchemy
-from flask import (Blueprint, render_template, redirect, url_for, flash, abort, request, current_app)
+from flask import (Blueprint, abort, current_app, flash, redirect,
+                   render_template, request, url_for)
 from flask_login import current_user, login_required
 from slugify import slugify
 
 from blog import db
-from blog.models import Post, Comment, Tag
-from blog.post.forms import PostForm, PostUpdateForm, CommentUpdateForm
-from blog.post.utils import save_picture_post_author, form_path_user_image
+from blog.models import Comment, Post, Tag
+from blog.post.forms import CommentUpdateForm, PostForm, PostUpdateForm
+from blog.post.utils import form_path_user_image, save_picture_post_author
 from blog.user.forms import AddCommentForm
 
 posts = Blueprint('posts', __name__, template_folder='templates')
@@ -63,38 +65,41 @@ def set_view_post(post):
     post.views += 1
     db.session.commit()
 
+
 def add_tag(form_post, post):
-            name = form_post.tag_form.data
-            if name:
-                name = name.split('/')
-                for i in name:
-                    tag_post = Tag(name=i)  # создаю тег
-                    tag_post.post_id = post.id
-                    db.session.add(tag_post)
-                db.session.commit()
-                flash('Тег к посту был добавлен', "success")
-                return redirect(url_for('posts.post', slug=post.slug))
+    name = form_post.tag_form.data
+    if name:
+        name = name.split('/')
+        for i in name:
+            tag_post = Tag(name=i)  # создаю тег
+            tag_post.post_id = post.id
+            db.session.add(tag_post)
+        db.session.commit()
+        flash('Тег к посту был добавлен', "success")
+        return redirect(url_for('posts.post', slug=post.slug))
+
 
 @posts.route('/post/<string:slug>', methods=['GET', 'POST'])
 @login_required
 def post(slug):
     post = Post.query.filter_by(slug=slug).first()
-    comment = Comment.query.filter_by(post_id=post.id).order_by(db.desc(Comment.date_posted)).all()
+    comment = Comment.query.filter_by(post_id=post.id).order_by(
+        db.desc(Comment.date_posted)).all()
     # print(comment)
-    
+
     set_view_post(post)
-   
 
     form_post = PostForm()
     form_comment = AddCommentForm()
     if request.method == 'POST':
-        
+
         # Добавляем тег или список тегов к посту
         add_tag(form_post, post)
 
     if request.method == 'POST' and form_comment.validate_on_submit():
         username = current_user.username
-        comment = Comment(username=username, body=form_comment.body.data, post_id=post.id, author_id=current_user.id)
+        comment = Comment(username=username, body=form_comment.body.data,
+                          post_id=post.id, author_id=current_user.id)
         db.session.add(comment)
         db.session.commit()
         flash('Комментарий к посту был добавлен', "success")
@@ -102,7 +107,7 @@ def post(slug):
     form_post.tag_form.data = ''
     # form_path_user_image()
     image_file = url_for('static',
-                        #  filename=f'profile_pics/' + 'users/' + post.author.username + '/post_images/' + post.image_post)
+                         #  filename=f'profile_pics/' + 'users/' + post.author.username + '/post_images/' + post.image_post)
                          filename=form_path_user_image(post.author.username) + post.image_post)
     print(image_file)
     return render_template('post/post.html', title=post.title, post=post, image_file=image_file,
@@ -114,7 +119,8 @@ def post(slug):
 def search():
     try:
         keyword = request.args.get('q')
-        search_posts = Post.query.msearch(keyword, fields=['title', 'content'], limit=6)
+        search_posts = Post.query.msearch(
+            keyword, fields=['title', 'content'], limit=6)
         if keyword and search_posts:
             return render_template('post/search.html', search_posts=search_posts, title='Поиск')
 
@@ -157,7 +163,7 @@ def update_post(slug):
     else:
         if request.method == 'POST':
             flash('Формат изображения должен быть "jpg", "png"', 'success')
-            
+
     # test_user_image_file()
     image_file = url_for('static',
                          filename=form_path_user_image(current_user.username) + post.image_post)
@@ -203,6 +209,28 @@ def tag(tag_str):
                            current_tag=current_tag, title='Статьи тега ' + current_tag.name)
 
 
+@posts.route('/post/<string:slug>/add_like_post', methods=['GET', 'PUT'])
+@login_required
+def add_like_post(slug):
+    post = Post.query.filter_by(slug=slug).first()
+    post.likes += 1
+    db.session.commit()
+    flash('Лайк к посту добавлен', 'success')
+    return redirect(url_for('posts.post', slug=post.slug))
+
+
+@posts.route('/post/<string:slug>/add_like_comment', methods=['GET', 'PUT'])
+@login_required
+def add_like_comment(slug):
+    post = Post.query.filter_by(slug=slug).first()
+    comment = Comment.query.filter_by(post_id=post.id).order_by(
+        db.desc(Comment.date_posted)).first()
+    comment.likes += 1
+    db.session.commit()
+    flash('Лайк к комментарию добавлен', 'success')
+    return redirect(url_for('posts.post', slug=post.slug))
+
+
 @posts.route('/post/<string:slug>/delete', methods=['DELETE', 'GET'])
 @login_required
 def delete_post(slug):
@@ -217,9 +245,9 @@ def delete_post(slug):
         os.unlink(
             os.path.join(current_app.root_path,
                          f'static/profile_pics/users/{current_user.username}/post_images/{post.image_post}'))
-        
+
     except:
-        db.session.delete(post) 
+        db.session.delete(post)
         # print('Не могу удалить пост!')
 
     db.session.commit()

@@ -1,12 +1,11 @@
 import os
-import secrets
 import random
+import secrets
 import shutil
 
-from PIL import Image
 from flask import current_app, url_for
-
 from flask_mail import Message
+from PIL import Image
 
 from blog import mail
 

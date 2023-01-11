@@ -1,11 +1,11 @@
 import os
 import secrets
 
-from flask import url_for
-from PIL import Image
-from flask import current_app
+from flask import current_app, url_for
 from flask_login import current_user
-from blog.settings import users_image_dir
+from PIL import Image
+
+from blog.settings import USER_IMAGE_DIRECTORY
 
 
 def form_path_user_image(username: str) -> str:
@@ -19,7 +19,7 @@ def path_to_post_user_img(username):
     Возвращает путь к папке с изображениями постов пользователя
     """
   
-    return os.path.join(current_app.root_path, users_image_dir, username, 'post_images')
+    return os.path.join(current_app.root_path, USER_IMAGE_DIRECTORY, username, 'post_images')
 
 def save_picture_post_author(form_picture, post):
     random_hex = secrets.token_hex(16)

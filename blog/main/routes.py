@@ -1,5 +1,6 @@
-from flask import Blueprint, render_template, request, g, url_for, redirect, session
-from flask_login import login_required, current_user
+from flask import (Blueprint, g, redirect, render_template, request, session,
+                   url_for)
+from flask_login import current_user, login_required
 
 from blog.models import Post, User
 

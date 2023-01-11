@@ -1,10 +1,10 @@
 from datetime import datetime
 
 from flask import current_app
+from flask_login import UserMixin
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 from blog import db, login_manager
-from flask_login import UserMixin
 
 
 @login_manager.user_loader
@@ -65,7 +65,7 @@ class Post(db.Model):
     __searchable__ = ['title', 'content']
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), unique=True, nullable=False)
-    content = db.Column(db.Text(60), nullable=False)
+    content = db.Column(db.Text(), nullable=False)
     category = db.Column(db.String(100), nullable=False)
     image_post = db.Column(db.String(120), nullable=False, default='default.jpg')
     views = db.Column(db.Integer, default=0)
@@ -86,8 +86,9 @@ class Comment(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(120), unique=False, nullable=False)
-    body = db.Column(db.Text(200), nullable=False)
+    body = db.Column(db.Text(), nullable=False)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    likes = db.Column(db.Integer, default=0)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=True)
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id', ondelete='CASCADE'), nullable=False)
 

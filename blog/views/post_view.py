@@ -1,6 +1,6 @@
 import os
 
-from flask import url_for, Markup
+from flask import Markup, url_for
 from flask_admin import form
 from flask_admin.contrib.sqla import ModelView
 from slugify import slugify

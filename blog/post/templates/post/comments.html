@@ -1,23 +1,23 @@
-<div class="row mt-5 mb-5">
-    <div class="col-10 m-auto">
+<div class="container mt-5 mb-5">
+    
         {% for i in comment %}
-        <div class="row d-flex justify-content-between mt-3 mb-3 border border-primary">
+        <div class="col-8 m-auto">
+        <div class="row d-flex justify-content-between my-3 border-bottom border-secondary">
 
 
-            <div class="col-6 mt-2">
-                <a href="{{ url_for('users.user_posts', username=i.username)}}">
+            <div class="col-12 my-2">
+                <a href="{{ url_for('users.user_posts', username=i.username)}}" style="text-decoration: none;">
 
                     <img src="{{ url_for('static', filename='profile_pics/'  + 'users/' +  i.username  + '/account_img/' +  i.author_comment.image_file ) }}"
-                         alt="" class="rounded-circle align-self-center" style="width:40px;">
-
+                         alt="" class="rounded-circle align-self-center" style="width:50px; margin-right: 10px;">
 
                     {{ i.username }}
 
-
                 </a>
             </div>
+            
 
-            <div class="col-auto mt-2">
+            <div class="col-auto my-2">
                 {{ i.date_posted.strftime('%d.%m.%Y-%H.%M') }}
             </div>
 
@@ -29,21 +29,23 @@
 
 
                 <div class="row d-flex justify-content-between">
-                    <div class="col-6">
-                        <div class="left_stat_side">&#128065; {{ i.views }}</div>
+                    <div class="col-auto">
                     </div>
                     <div class="col-auto">
-                        <div class="right_stat_side">&#10084; {{ i.likes }}</div>
+
+                        <form action="{{ url_for('posts.add_like_comment', slug=post.slug) }}" method="put">
+                            <div class="right_stat_side my-3"><button class="button btn"> &#10084;</button> {{ i.likes }}</div>
+                            </form>
+
                     </div>
                 </div>
 
 
-                <div class="row">
                     {% if post.author == current_user or current_user.username == i.username or current_user.is_admin %}
-                    <div class="col-12 d-flex justify-content-around">
-                        <a href="{{ url_for( 'posts.update_comment', comment_id=i.id) }}"><p>Обновить комментарий</p>
+                    <div class="col-12 m-auto d-flex justify-content-end my-2">
+                        <a href="{{ url_for( 'posts.update_comment', comment_id=i.id) }}"><button class="btn btn-warning btn-sm mx-2">Обновить</button>
                         </a>
-                        <a href="{{ url_for( 'posts.delete_comment', comment_id=i.id) }}"><p>Удалить комментарий</p></a>
+                        <a href="{{ url_for( 'posts.delete_comment', comment_id=i.id) }}"><button class="btn btn-danger btn-sm">Удалить</button></a>
                         {% else %}
 
                         {% endif %}

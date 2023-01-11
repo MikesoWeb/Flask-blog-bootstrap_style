@@ -28,23 +28,25 @@
         </div>
 
         <div class="row">
-            <div class="col-12 mt-2">
+            <div class="col-auto mt-2">
                 <h2 class="article-title"> {{ post.title|safe }}</h2>
             </div>
             <div class="row d-flex justify-content-between mt-2 mb-2">
-                <div class="col-8">
+                <div class="col-6">
                     <p class="article-content" align="left">{{ post.content|safe}}</p>
                 </div>
                 <div class="col-auto d-flex">
-                    <img src="{{ image_file }}" alt="post_img" style="width: 300px; align-self:center">
+                    <img src="{{ image_file }}" alt="post_img" style="width: 600px; align-self:center">
                 </div>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-8 d-flex justify-content-between m-auto">
-            <div class="left_side_stat_post">&#128065; {{ post.views }}</div>
-            <div class="right_side_stat_post">&#10084; {{ post.likes }}</div>
+            <div class="left_side_stat_post">&#128065;{{ post.views }}</div>
+            <form action="{{ url_for('posts.add_like_post', slug=post.slug) }}" method="put">
+            <div class="right_side_stat_post"><button class="button btn"> &#10084;</button> {{ post.likes }}</div>
+            </form>
         </div>
 
     </div>
@@ -59,7 +61,7 @@
                     <div class="d-flex mx-3">
                         <a href="{{ url_for('posts.tag', tag_str=i.name) }}">{{ i.name }}</a>
                     
-                        <a href="{{ url_for( 'posts.delete_tag', tag_id=i.id) }}" class="text-danger">Удалить</a>
+                        <a href="{{ url_for( 'posts.delete_tag', tag_id=i.id) }}" class="text-danger"><img src="https://img.icons8.com/color/16/null/minus.png"/></a>
                     </div>
                 </div>
             </div>
